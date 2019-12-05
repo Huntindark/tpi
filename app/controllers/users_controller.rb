@@ -1,16 +1,20 @@
+require 'digest/sha1'
+
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
 
   # POST /sesiones
   def login
     query = User.getUser(params[:u])
-    if query[0]['passwd'] == params[:p] then 
+    if query[0]['passwd'] == params[:p] 
       session[:id] = query[0]['id'] 
-      session[:token] = 'dsp lo toco'
+      session[:expire] = Time.now.strftime("%H%M").to_i+30
+      session[:token] = Digest::SHA1.hexdigest "#{session[:id]}#{params[:p]}#{params[:u]}#{session[:expire]}"
+      render json: session
     else
-      
+      render json: ' u suck'
+    end
   end
-
 
   # GET /users
   def index
