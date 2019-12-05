@@ -1,0 +1,2 @@
+class Ivatype < ApplicationRecord
+end
