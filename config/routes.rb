@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     
   #PRODUCTOS
   get '/productos', to: 'products#list_filtered'
+  get '/productos/:code', to: 'products#show_prod'
+  get '/productos/:code/items', to: 'products#show_prod_items'
+  post '/productos/:code/items', to: 'products#create_prod_items'
 
 
 
