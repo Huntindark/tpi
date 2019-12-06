@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   end
 
   def test
-    render session
+    render json: session
   end
 
   # GET /users
