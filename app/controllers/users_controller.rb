@@ -6,13 +6,13 @@ class UsersController < ApplicationController
   # POST /sesiones
   def login
     query = User.getUser(params[:u])
-    if query[0]['passwd'] == params[:p] 
+    if params[:p].present? && query[0]['passwd'] == params[:p] 
       session[:id] = query[0]['id'] 
       session[:expire] = Time.now.strftime("%H%M").to_i+30
       session[:token] = Digest::SHA1.hexdigest "#{session[:id]}#{params[:p]}#{params[:u]}#{session[:expire]}"
       render json: session
     else
-      render json: ' u suck'
+      render json: "#{params[:p].present?} #{params[:u].present?}"
     end
   end
 
