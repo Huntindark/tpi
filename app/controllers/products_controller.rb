@@ -1,6 +1,20 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :update, :destroy]
 
+  def list_filtered
+    Product.all.map do |product|
+     query = product.detail
+     render json: query
+=begin
+    if params[:q].present?
+      filter = params[:q]
+      @products = Product.all
+      if filter = 'scarce'
+        @products.map do |product|
+=end
+  end
+
+
   # GET /products
   def index
     @products = Product.all
@@ -46,6 +60,6 @@ class ProductsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def product_params
-      params.permit(:uniCode, :desc, :detail, :basePrice)
+      params.permit(:uniCode, :desc, :detail, :basePrice, :q)
     end
 end

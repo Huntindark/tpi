@@ -10,7 +10,16 @@ Rails.application.routes.draw do
   resources :items
   resources :products
 
+  #USER
   post '/sesiones', to: 'users#login'
+  post '/usuarios', to: 'users#create'
+    
+  #PRODUCTOS
+  get '/productos', to: 'products#list_filtered'
+
+
+
+  #TESTING
   get '/test', to: 'users#test'
 
 
