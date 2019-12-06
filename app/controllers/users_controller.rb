@@ -16,6 +16,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def test
+    render session
+  end
+
   # GET /users
   def index
     @users = User.all
