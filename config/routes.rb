@@ -14,12 +14,15 @@ Rails.application.routes.draw do
   post '/sesiones', to: 'users#login'
   post '/usuarios', to: 'users#create'
     
-  #PRODUCTOS
+  #PRODUCT
   get '/productos', to: 'products#list_filtered'
   get '/productos/:code', to: 'products#show_prod'
   get '/productos/:code/items', to: 'products#show_prod_items'
   post '/productos/:code/items', to: 'products#create_prod_items'
 
+  #RESERVATION
+  get '/reservas', to: 'reservations#not_sold'
+  get '/reservas/:id', to: 'reservations#by_id'
 
 
   #TESTING

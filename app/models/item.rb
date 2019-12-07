@@ -1,7 +1,7 @@
 class Item < ApplicationRecord
   belongs_to :product
 
-  def self.create_for(prod)
+  def self.createFor(prod)
   	    @connection = ActiveRecord::Base.connection
         code = prod['id']
         time = Time.now.getutc
