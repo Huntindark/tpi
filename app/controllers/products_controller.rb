@@ -42,7 +42,7 @@ class ProductsController < ApplicationController
     if params[:create_x].present?
       create = params[:create_x]
       product = Product.getProdByCode(params[:code]) 
-      create.to_i.times {Item.createFor(product)}
+      Product.createItems(params[:code], create)   
     else
       render status: 406
     end

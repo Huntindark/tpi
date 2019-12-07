@@ -9,17 +9,29 @@ class ReservationsController < ApplicationController
   def by_id
     res = {}
     res['Reserva'] = Reservation.findById(params[:id])
-    if params[:items].present? 
-      res['Items'] = Reserved.itemsFor(params[:id])
+    if res['Reserva'].blank?
+      if params[:items].present? 
+        res['Items'] = Reserved.itemsFor(params[:id])
+      end
+      if params[:sale].present? 
+        res['Venta'] = Sell.saleFor(params[:id])
+      end 
+      render json: res
+    else 
+      render status: 404
     end
-    if params[:sale].present? 
-      res['Venta'] = Sell.saleFor(params[:id])
-    end 
-
-    render json: res
-
   end
 
+  def reserve
+    if params[:client_id].preset? && params[:user_id].preset? && params[:to_reserve].preset?
+      client = params[:client_id]
+      user = params[:user_id]
+      reserve =  params[:to_reserve]
+      response = Reservation.reserve(client, user, reserve)
+      render json: response
+    else 
+      render json: {message: 'Missing parameters', status: 406 }
+  end
 
   # GET /reservations
   def index
@@ -66,6 +78,6 @@ class ReservationsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def reservation_params
-      params.permit(:client_id, :user_id, :status, :items, :sale)
+      params.permit(:client_id, :user_id, :status, :items, :sale, :to_reserve)
     end
 end

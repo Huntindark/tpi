@@ -19,4 +19,17 @@ class Reservation < ApplicationRecord
 	return result[0]
   end
 
+  #User should be the authentication token, dont forget to change it
+
+  def self.reserve(client, user, reserve)
+  	response = {}
+  	enough = reserve.all { |product| Product.hasStock(product)}
+  	if enough
+  		if Client.isClient(client)
+  			if User.isUser(user)
+  				Reservation.
+  				Product.reserve(reserve) #change items status
+
+  end
+
 end

@@ -51,6 +51,6 @@ has_many :items
         return query        
     end
 
-
-
+    def self.createItems(prodcut, create)
+        create.to_i.times {Item.createFor(product)}
 end
