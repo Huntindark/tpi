@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_07_002514) do
+ActiveRecord::Schema.define(version: 2019_12_07_221616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,14 @@ ActiveRecord::Schema.define(version: 2019_12_07_002514) do
     t.index ["sell_id"], name: "index_solds_on_sell_id"
   end
 
+  create_table "tokens", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "authentication"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_tokens_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "passwd", null: false
@@ -118,4 +126,5 @@ ActiveRecord::Schema.define(version: 2019_12_07_002514) do
   add_foreign_key "sells", "users"
   add_foreign_key "solds", "items"
   add_foreign_key "solds", "sells"
+  add_foreign_key "tokens", "users"
 end

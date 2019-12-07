@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :tokens
   resources :solds
   resources :sells
   resources :reserveds
@@ -11,7 +12,7 @@ Rails.application.routes.draw do
   resources :products
 
   #USER
-  post '/sesiones', to: 'users#login'
+  post '/sesiones', to: 'users#session'
   post '/usuarios', to: 'users#create'
     
   #PRODUCT
@@ -26,7 +27,6 @@ Rails.application.routes.draw do
 
 
   #TESTING
-  get '/test', to: 'users#test'
 
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
