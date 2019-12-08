@@ -20,7 +20,7 @@ class Reservation < ApplicationRecord
   end
 
   #User should be the authentication token, dont forget to change it
-
+=begin
   def self.reserve(client, user, reserve)
   	response = {}
   	enough = reserve.all { |product| Product.hasStock(product)}
@@ -31,5 +31,5 @@ class Reservation < ApplicationRecord
   				Product.reserve(reserve) #change items status
 
   end
-
+=end
 end

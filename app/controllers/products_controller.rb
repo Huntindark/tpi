@@ -8,19 +8,20 @@ class ProductsController < ApplicationController
       filter = params[:q]
       query = {}
       if filter == 'scarce'
-          query = Product.getScarce(@products)
+          query = Product.getScarce
       elsif filter == 'all'
-          query = Product.getAll(@products)
+          query = Product.getAll
       end
     else 
-      query = Product.getInStock(@products)
+      query = Product.getInStock
     end
     render json: query.first(25)
   end
 
+
+
   def show_prod
-    product = Product.getProdByCode(params[:code])
-#    render json: product.blank? ?  404 : product
+    product = Product.find_by(unicode: params[:code])
     if product.blank?
       render status: 404 
     else
@@ -29,11 +30,11 @@ class ProductsController < ApplicationController
   end
 
   def show_prod_items
-    product = Product.getProdByCode(params[:code]) 
+    product = Product.find_by(unicode: params[:code]) 
     if product.blank?
       render status: 404 
     else
-      items = Product.getProdItems(product)
+      items = Item.where(product_id: product.id)
       render json: items
     end
   end
@@ -41,8 +42,8 @@ class ProductsController < ApplicationController
   def create_prod_items
     if params[:create_x].present?
       create = params[:create_x]
-      product = Product.getProdByCode(params[:code]) 
-      Product.createItems(params[:code], create)   
+      product = Product.find_by(unicode: params[:code]) 
+      Product.createItems(product.id, create)   
     else
       render status: 406
     end

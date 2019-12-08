@@ -3,19 +3,6 @@ require 'digest/sha1'
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
 
-=begin  # POST /sesiones
-  def login
-    query = User.getUser(params[:u])
-    if params[:p].present? && query[0]['passwd'] == params[:p] 
-      session[:id] = query[0]['id'] 
-      session[:expire] = Time.now.strftime("%H%M").to_i+30
-      session[:token] = Digest::SHA1.hexdigest "#{session[:id]}#{params[:p]}#{params[:u]}#{session[:expire]}"
-      render json: session
-    else
-      render json: "#{params[:p].present?} #{params[:u].present?}"
-    end
-  end
-=end
   def session
     @user = User.find_by(username: params[:u], passwd: params[:p])  
     if @user.present?
@@ -26,11 +13,7 @@ class UsersController < ApplicationController
       render json: token
     end
   end
-=begin 
-  def test
-    render json: session
-  end
-=end
+
   # GET /users
   def index
     @users = User.all

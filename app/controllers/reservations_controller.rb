@@ -10,12 +10,8 @@ class ReservationsController < ApplicationController
     res = {}
     res['Reserva'] = Reservation.findById(params[:id])
     if res['Reserva'].blank?
-      if params[:items].present? 
-        res['Items'] = Reserved.itemsFor(params[:id])
-      end
-      if params[:sale].present? 
-        res['Venta'] = Sell.saleFor(params[:id])
-      end 
+      res['Items'] = Reserved.itemsFor(params[:id]) if params[:items].present?       
+      res['Venta'] = Sell.saleFor(params[:id]) if params[:sale].present?
       render json: res
     else 
       render status: 404
@@ -31,6 +27,7 @@ class ReservationsController < ApplicationController
       render json: response
     else 
       render json: {message: 'Missing parameters', status: 406 }
+    end
   end
 
   # GET /reservations
@@ -71,13 +68,13 @@ class ReservationsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_reservation
-      @reservation = Reservation.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_reservation
+    @reservation = Reservation.find(params[:id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def reservation_params
-      params.permit(:client_id, :user_id, :status, :items, :sale, :to_reserve)
-    end
+  # Only allow a trusted parameter "white list" through.
+  def reservation_params
+    params.permit(:client_id, :user_id, :status, :items, :sale, :to_reserve)
+  end
 end
