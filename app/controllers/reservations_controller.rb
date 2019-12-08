@@ -9,29 +9,49 @@ class ReservationsController < ApplicationController
   def by_id
     res = {}
     res['Reserva'] = Reservation.find(params[:id])
-    if res['Reserva'].blank?
-      #res['Items'] = Reserved.itemsFor(params[:id]) if params[:items].present?     
-      res['Items'] = Reserved.joins(:reservation, :item).joins("INNER JOIN products ON items.product_id = products.id") .select('items.*') if params[:items].present?
-      #res['Venta'] = Sell.saleFor(params[:id]) if params[:sale].present?
+    if res['Reserva'].blank?  
+      res['Items'] = Reserved.joins(:reservation, :item).joins("INNER JOIN products ON items.product_id = products.id").select('items.*') if params[:items].present?
       if params[:sale].present? && res['Reserva'].present?
         res['Venta'] =  Sell.joins(:reservation, :client, :user).select(:name, :username, :reservation_id, :created_at)
+      end
       render json: res
     else 
       render status: 404
     end
   end  
 
-  #Preguntar a vanza como se hace lo de los 2 mensajes para parametros
+  #curl -X POST ht":{"abc123456": "1"}}' -H "Content-Type:application/json"_id":"1", "to_reserve" 
 
   def reserve
-    if params[:client_id].preset? && params[:user_id].preset? && params[:to_reserve].preset?
-      client = params[:client_id]
-      user = params[:user_id]
-      reserve =  params[:to_reserve]
-      response = Reservation.reserve(client, user, reserve)
+    if params[:client_id].present? && params[:user_id].present? && params[:to_reserve].present?
+      response = Reservation.reserve(params)
       render json: response
     else 
       render json: {message: 'Missing parameters', status: 406 }
+    end
+  end
+
+  def sell 
+    res = Reservation.find(params[:id])
+    if res.present?
+      if res.status = 'Pendiente'
+        sale = Reservation.sell(res)
+        ans = sale
+      else
+        ans =  {message: 'Reservation already sold', status: 406 }  
+      end
+    else
+      ans = {message: 'Reservation not found', status: 404 }
+    end
+    render json: ans
+  end
+
+  def cancel
+    res = Reservation.find(params[:id])
+    if res.present? && (res.status != 'Vendido')
+      toFree = Reserved.where(reservation_id: res.id)
+      toFree.map { |free| Item.find(free.item_id).update!(status: 'Disponible') }
+      res.update!(status: 'Cancelada')
     end
   end
 

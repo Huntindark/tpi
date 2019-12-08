@@ -1,6 +1,37 @@
 class SellsController < ApplicationController
   before_action :set_sell, only: [:show, :update, :destroy]
 
+  def user_sales
+    if params[:authentication].present?
+      tkn = params[:authentication]
+      user = Token.authenticate(tkn)
+      if user.present?
+        sales = Sell.where(user_id: user.id).select(:created_at, :total, :client_id)
+        sales = sales.map { |sale| {"Client": "#{Client.find(sale.client_id).name}", "Date": "#{sale.created_at}", "Total": "#{sale.total}"}} 
+        render json: sales
+      else
+        render status: 404
+      end
+  end
+
+  def user_sale
+      if params[:authentication].present?
+      tkn = params[:authentication]
+      user = Token.authenticate(tkn)
+      if user.present?
+        sales = Sell.find(params[:id]) # .select(:created_at, :total, :client_id)
+        sales = {"Client": "#{Client.find(sales.client_id).name}", "Date": "#{sales.created_at}", "Total": "#{sales.total}"}
+        if params[:items].present?
+          sales[:Items] = Sold.joins(:sell, :item).where("solds.sell_id= 1").select("items.*")
+        render json: sales
+      else
+        render status: 404
+      end
+  end
+
+  def sell
+  end
+
   # GET /sells
   def index
     @sells = Sell.all

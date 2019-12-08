@@ -3,9 +3,15 @@ class Token < ApplicationRecord
 
   def self.authenticate(auth)
   	token = Token.find_by(authentication: auth)
-  	if token.created_at < (Time.now.utc + 30.minutes)
-  		user = User.find(token.user_id)
-  		return user
+  	if token.present? 
+  		if token.created_at > (Time.now.utc + 30.minutes)
+  			user = User.find(token.user_id)
+  		else
+  			token.delete
+  			false
+  		end
+  	else
+  		false
   	end
   end
 

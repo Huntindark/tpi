@@ -24,6 +24,14 @@ Rails.application.routes.draw do
   #RESERVATION
   get '/reservas', to: 'reservations#not_sold'
   get '/reservas/:id', to: 'reservations#by_id'
+  post '/reservas', to: 'reservations#reserve'
+  put '/reservas/:id/vender', to: 'reservations#sell'
+  delete 'reservas/:id', to: 'reservation#cancel'
+
+  #SELL
+  get '/ventas', to: 'sells#user_sales'
+  get '/ventas/:id', to: 'sells#user_sale'
+  post '/ventas', to: 'sells#sell'
 
 
   #TESTING
