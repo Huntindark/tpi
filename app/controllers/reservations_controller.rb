@@ -19,7 +19,9 @@ class ReservationsController < ApplicationController
     else 
       render status: 404
     end
-  end
+  end  
+
+  #Preguntar a vanza como se hace lo de los 2 mensajes para parametros
 
   def reserve
     if params[:client_id].preset? && params[:user_id].preset? && params[:to_reserve].preset?
