@@ -1,6 +1,7 @@
 class Reservation < ApplicationRecord
   belongs_to :client
   belongs_to :user
+  has_many :reserved
 
   def self.notSold
     @connection = ActiveRecord::Base.connection
