@@ -23,27 +23,34 @@ class ReservationsController < ApplicationController
   #curl -X POST ht":{"abc123456": "1"}}' -H "Content-Type:application/json"_id":"1", "to_reserve" 
 
   def reserve
-    if params[:client_id].present? && params[:user_id].present? && params[:to_reserve].present?
-      response = Reservation.reserve(params)
-      render json: response
-    else 
-      render json: {message: 'Missing parameters', status: 406 }
-    end
-  end
-
-  def sell 
-    res = Reservation.find(params[:id])
-    if res.present?
-      if res.status = 'Pendiente'
-        sale = Reservation.sell(res)
-        ans = sale
-      else
-        ans =  {message: 'Reservation already sold', status: 406 }  
+    user = Token.authenticate(params[:authentication])
+    if user.present?  
+      if params[:client_id].present? && params[:to_reserve].present?
+        response = Reservation.reserve(params, user)
+        render json: response
+      else 
+        render json: {message: 'Missing parameters', status: 406 }
       end
     else
-      ans = {message: 'Reservation not found', status: 404 }
+      render status: 404
+  end
+    
+  def sell 
+    user = Token.authenticate(params[:authentication])
+    if user.present? 
+      res = Reservation.find(params[:id])
+      if res.present?
+        if res.status = 'Pendiente'
+          sale = Reservation.sell(res, user)
+          ans = sale
+        else
+          ans =  {message: 'Reservation already sold', status: 406 }  
+        end
+      else
+        ans = {message: 'Reservation not found', status: 404 }
+      end
+      render json: ans
     end
-    render json: ans
   end
 
   def cancel

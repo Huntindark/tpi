@@ -15,7 +15,7 @@ class SellsController < ApplicationController
   end
 
   def user_sale
-      if params[:authentication].present?
+    if params[:authentication].present?
       tkn = params[:authentication]
       user = Token.authenticate(tkn)
       if user.present?
@@ -23,13 +23,28 @@ class SellsController < ApplicationController
         sales = {"Client": "#{Client.find(sales.client_id).name}", "Date": "#{sales.created_at}", "Total": "#{sales.total}"}
         if params[:items].present?
           sales[:Items] = Sold.joins(:sell, :item).where("solds.sell_id= 1").select("items.*")
+        end
         render json: sales
       else
         render status: 404
       end
+    end
   end
 
+  #curl -X POST ht":{"abc123456": "1"}}' -H "Content-Type:application/json"_id":"1", "to_sell" 
+
   def sell
+    if params[:authentication].present?
+      tkn = params[:authentication]
+      user = Token.authenticate(tkn)
+      if user.present?
+        Sell.sell(params, user)
+      else
+        render status: 404
+      end
+    else
+      render status: 404
+    end
   end
 
   # GET /sells
