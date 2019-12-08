@@ -2,16 +2,19 @@ class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :update, :destroy]
 
   def not_sold
-    query = Reservation.joins(:client).where(status: 'Pendiente').select(:"reservations.created_at", :name, :total)
+    query = Reservation.not_sold
     render json: query
   end
 
   def by_id
     res = {}
-    res['Reserva'] = Reservation.findById(params[:id])
+    res['Reserva'] = Reservation.find(params[:id])
     if res['Reserva'].blank?
-      res['Items'] = Reserved.itemsFor(params[:id]) if params[:items].present?       
-      res['Venta'] = Sell.saleFor(params[:id]) if params[:sale].present?
+      #res['Items'] = Reserved.itemsFor(params[:id]) if params[:items].present?     
+      res['Items'] = Reserved.joins(:reservation, :item).joins("INNER JOIN products ON items.product_id = products.id") .select('items.*') if params[:items].present?
+      #res['Venta'] = Sell.saleFor(params[:id]) if params[:sale].present?
+      if params[:sale].present? && res['Reserva'].present?
+        res['Venta'] =  Sell.joins(:reservation, :client, :user).select(:name, :username, :reservation_id, :created_at)
       render json: res
     else 
       render status: 404

@@ -1,15 +1,18 @@
 class Reservation < ApplicationRecord
   belongs_to :client
   belongs_to :user
+  belongs_to :sell
   has_many :reserved
 
-  def self.notSold
+  def self.not_sold
+    Reservation.joins(:client).where(status: 'Pendiente').select(:"reservations.created_at", :name, :total)
+=begin    
     @connection = ActiveRecord::Base.connection
     result = @connection.exec_query("SELECT r.created_at, c.name, r.total
                                          FROM reservations as r INNER JOIN clients as c ON r.client_id = c.id
                                          WHERE status='Pendiente'")
     return result
-
+=end
   end
 
   def self.findById(id)
