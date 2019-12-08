@@ -2,20 +2,30 @@ class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :update, :destroy]
 
   def not_sold
-    query = Reservation.not_sold
-    render json: query
+    user = Token.authenticate(params[:authentication])
+    if user.present?    
+      query = Reservation.not_sold
+      render json: query
+    else
+      render status: 404
+    end
   end
 
   def by_id
-    res = {}
-    res['Reserva'] = Reservation.find(params[:id])
-    if res['Reserva'].blank?  
-      res['Items'] = Reserved.joins(:reservation, :item).joins("INNER JOIN products ON items.product_id = products.id").select('items.*') if params[:items].present?
-      if params[:sale].present? && res['Reserva'].present?
-        res['Venta'] =  Sell.joins(:reservation, :client, :user).select(:name, :username, :reservation_id, :created_at)
+    user = Token.authenticate(params[:authentication])
+    if user.present?
+      res = {}
+      res['Reserva'] = Reservation.find(params[:id])
+      if res['Reserva'].blank?  
+        res['Items'] = Reserved.joins(:reservation, :item).joins("INNER JOIN products ON items.product_id = products.id").select('items.*') if params[:items].present?
+        if params[:sale].present? && res['Reserva'].present?
+          res['Venta'] =  Sell.joins(:reservation, :client, :user).select(:name, :username, :reservation_id, :created_at)
+        end
+        render json: res
+      else 
+        render status: 404
       end
-      render json: res
-    else 
+    else
       render status: 404
     end
   end  
@@ -54,11 +64,16 @@ class ReservationsController < ApplicationController
   end
 
   def cancel
-    res = Reservation.find(params[:id])
-    if res.present? && (res.status != 'Vendido')
-      toFree = Reserved.where(reservation_id: res.id)
-      toFree.map { |free| Item.find(free.item_id).update!(status: 'Disponible') }
-      res.update!(status: 'Cancelada')
+    user = Token.authenticate(params[:authentication])
+    if user.present?    
+      res = Reservation.find(params[:id])
+      if res.present? && (res.status != 'Vendido')
+        toFree = Reserved.where(reservation_id: res.id)
+        toFree.map { |free| Item.find(free.item_id).update!(status: 'Disponible') }
+        res.update!(status: 'Cancelada')
+      end
+    else 
+      render status: 404
     end
   end
 

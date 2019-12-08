@@ -2,50 +2,69 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :update, :destroy]
 
   def list_filtered
-#    if params[:token].present? && params[:token] == session[:token] && params[:q].present?
-    @products = Product.all
-    if params[:q].present?
-      filter = params[:q]
-      query = {}
-      if filter == 'scarce'
-          query = Product.getScarce
-      elsif filter == 'all'
-          query = Product.getAll
+    user = Token.authenticate(params[:authentication])
+    if user.present?
+      @products = Product.all
+      if params[:q].present?
+        filter = params[:q]
+        query = {}
+        if filter == 'scarce'
+            query = Product.getScarce
+        elsif filter == 'all'
+            query = Product.getAll
+        end
+      else 
+        query = Product.getInStock
       end
-    else 
-      query = Product.getInStock
+      render json: query.first(25)
+    else
+      render status: 404
     end
-    render json: query.first(25)
   end
 
 
 
   def show_prod
-    product = Product.find_by(unicode: params[:code])
-    if product.blank?
-      render status: 404 
+    user = Token.authenticate(params[:authentication])
+    if user.present?
+      product = Product.find_by(unicode: params[:code])
+      if product.blank?
+        render status: 404 
+      else
+        render json: product
+      end
     else
-      render json: product
+      render status: 404
     end
   end
 
   def show_prod_items
-    product = Product.find_by(unicode: params[:code]) 
-    if product.blank?
-      render status: 404 
-    else
-      items = Item.where(product_id: product.id)
-      render json: items
+    user = Token.authenticate(params[:authentication])
+    if user.present?
+      product = Product.find_by(unicode: params[:code]) 
+      if product.blank?
+        render status: 404 
+      else
+        items = Item.where(product_id: product.id)
+        render json: items
+      end
+    else 
+      render status: 404
     end
   end
 
   def create_prod_items
-    if params[:create_x].present?
-      create = params[:create_x]
-      product = Product.find_by(unicode: params[:code]) 
-      Product.createItems(product.id, create)   
+    user = Token.authenticate(params[:authentication])
+    if user.present?    
+      if params[:create_x].present?
+        create = params[:create_x]
+        product = Product.find_by(unicode: params[:code]) 
+        Product.createItems(product.id, create)   
+      else
+        render status: 406
+      end
     else
-      render status: 406
+      render status: 404
     end
   end
 
