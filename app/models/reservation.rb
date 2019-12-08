@@ -5,8 +5,8 @@ class Reservation < ApplicationRecord
 
   def self.notSold
     @connection = ActiveRecord::Base.connection
-    result = @connection.exec_query("SELECT *
-                                         FROM reservations
+    result = @connection.exec_query("SELECT r.created_at, c.name, r.total
+                                         FROM reservations as r INNER JOIN clients as c ON r.client_id = c.id
                                          WHERE status='Pendiente'")
     return result
 

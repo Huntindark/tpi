@@ -2,7 +2,7 @@ class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :update, :destroy]
 
   def not_sold
-    query = Reservation.where(status: 'Pendiente')
+    query = Reservation.joins(:client).where(status: 'Pendiente').select(:"reservations.created_at", :name, :total)
     render json: query
   end
 
