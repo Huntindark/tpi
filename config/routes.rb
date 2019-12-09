@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   get '/ventas/:id', to: 'sells#user_sale'
   post '/ventas', to: 'sells#sell'
 
+  #CLIENT
+  post '/clientes', to 'clients#register'
 
   #TESTING
   get '/authenticate', to: 'tokens#authenticate'

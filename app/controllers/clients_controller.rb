@@ -1,6 +1,16 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :update, :destroy]
 
+  def register
+    if params[phones].present
+      @client = Client.create!(client_params)
+      params[phones].each do | k, v |
+        Phone.create!(number: v, client_id: @client.id)        
+      end   
+      render json: @client, status: :created, location: @client          
+    end
+  end
+
   # GET /clients
   def index
     @clients = Client.all
