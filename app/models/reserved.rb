@@ -1,7 +1,7 @@
 class Reserved < ApplicationRecord
   belongs_to :reservation
   belongs_to :item
-
+=begin
   def self.itemsFor(reservation)
     @connection = ActiveRecord::Base.connection
 	result = @connection.exec_query("SELECT *
@@ -9,4 +9,5 @@ class Reserved < ApplicationRecord
                                  WHERE reservations.id = '#{reservation}'")
 	return result
   end
+=end  
 end
