@@ -31,6 +31,21 @@ RSpec.describe ReservationsController, type: :controller do
 			end
 		end
 		context "The reservation isn't created succesfully" do
+			let(:params)do
+				{
+					client_id: client.id,
+					to_reserve: res
+				}
+			end
+			it "Doesn't creates the reservation" do
+				expect { subject }.to change { Reservation.count }.by(0)
+			end
+			it "Doesn't creates the reserveds" do
+				expect { subject }.to change { Reserved.count }.by(0)
+			end
+			it "Doesn't changes the Item statuses" do
+				expect{subject}.not_to change { item.reload.status }.from('Disponible')
+			end
 		end
 	end
 

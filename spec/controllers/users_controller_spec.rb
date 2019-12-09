@@ -17,15 +17,39 @@ RSpec.describe UsersController, type: :controller do
         context 'failed creation' do
             let(:params) do
                 {
-                    username: 'Joe',
-                    passwd: ''
+                    username: '',
+                    passwd: '1234'
                 }
             end            
             it 'fails' do
                 expect { post :create, params: params }.to change { User.count }.by(0)
             end
         end
-
-
 	end
+    describe 'post session' do
+        context 'succesful login' do
+            let!(:user){create(:user)}
+            let(:params) do
+                {
+                    u: 'Joe',
+                    p: '1234'
+                }
+            end
+            it 'logs in' do
+                expect { post :session, params: params }.to change { Token.count }.by(1)
+            end
+        end
+        context 'unsuccesful login' do
+            let!(:user){create(:user)}
+            let(:params) do
+                {
+                    u: 'John',
+                    p: '1234'
+                }
+            end
+            it "doesn't logs in" do
+                expect { post :session, params: params }.to change { Token.count }.by(0)
+            end
+        end
+    end
 end
