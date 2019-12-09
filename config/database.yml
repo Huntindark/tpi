@@ -21,7 +21,7 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-development:
+development:  
   <<: *default
   database: tpi_development
 
@@ -78,7 +78,16 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-production:
+
+ # REMOTE
+#  production:
+#  <<: *default
+#  database: d9eemstilc43ic
+#  username: ljbckaffumhvub
+#  password: 573543e345358c1491ca88712685e7e18f64ee5ed18c1194357783a2aa534e53
+
+#LOCAL
+ production:
   <<: *default
   database: tpi_production
   username: tpi
