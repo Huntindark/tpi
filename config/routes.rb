@@ -34,7 +34,7 @@ Rails.application.routes.draw do
   post '/ventas', to: 'sells#sell'
 
   #CLIENT
-  post '/clientes', to 'clients#register'
+  post '/clientes', to: 'clients#register'
 
   #TESTING
   get '/authenticate', to: 'tokens#authenticate'

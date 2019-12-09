@@ -5,24 +5,7 @@ class Reservation < ApplicationRecord
 
   def self.not_sold
     Reservation.joins(:client).where(status: 'Pendiente').select(:"reservations.created_at", :name, :total)
-=begin    
-    @connection = ActiveRecord::Base.connection
-    result = @connection.exec_query("SELECT r.created_at, c.name, r.total
-                                         FROM reservations as r INNER JOIN clients as c ON r.client_id = c.id
-                                         WHERE status='Pendiente'")
-    return result
-=end
   end
-
-  def self.findById(id)
-	@connection = ActiveRecord::Base.connection
-	result = @connection.exec_query("SELECT *
-                                     FROM reservations
-                                     WHERE id='#{id}'")
-	return result[0]
-  end
-
-  #User should be the authentication token, dont forget to change it
 
   def self.reserve(params, user)
   	response = {}
