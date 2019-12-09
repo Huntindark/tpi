@@ -80,15 +80,15 @@ test:
 #
 
  # REMOTE
-production:
-  <<: *default
-  database: d3jf3vd4b2ebqr
-  username: oatxxktudqqqap
-  password: d1937fb65d51262fa0946edc94be987cc838e2b0758d0db2b16a1329dcd51fd0
+#production:
+ # <<: *default
+  #database: d9eemstilc43ic
+  #username: ljbckaffumhvub
+  #password: 573543e345358c1491ca88712685e7e18f64ee5ed18c1194357783a2aa534e53
 
- #LOCAL
-# production:
-#   <<: *default
-#   database: tpi_production
-#   username: tpi
-#   password: <%= ENV['TPI_DATABASE_PASSWORD'] %>
+#LOCAL
+ production:
+   <<: *default
+   database: tpi_production
+   username: tpi
+   password: <%= ENV['TPI_DATABASE_PASSWORD'] %>
