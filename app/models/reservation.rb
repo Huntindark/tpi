@@ -39,7 +39,7 @@ class Reservation < ApplicationRecord
 
   def self.sell(res, user)
     time = Time.now.utc
-    sale = Sell.create!(client_id: res.client_id, user_id: user.user_id, created_at: time, updated_at: time, total: res.total, reservation_id: res.id)
+    sale = Sell.create!(client_id: res.client_id, user_id: user.id, created_at: time, updated_at: time, total: res.total, reservation_id: res.id)
     res.update!(status: 'Vendido')
     reserved = Reserved.where(reservation_id: res.id)
     sold = reserved.map do |toSell| 

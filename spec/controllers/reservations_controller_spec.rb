@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ReservationsController, type: :controller do
-	let(:token){create(:token)}	
 	describe 'post reserve' do
+		let(:token){create(:token)}	
 		let(:client){create(:client)}
 		let(:product){create(:product)}
 		let!(:item){create(:item, product: product)}
@@ -50,9 +50,9 @@ RSpec.describe ReservationsController, type: :controller do
 	end
 
 	describe 'put sell' do
-		#let(:token){create(:token)}
-		let(:reservation){create(:reservation)}
+		let(:token){create(:token)}
 		context 'The reservation is sold' do
+			let(:reservation){create(:reservation, user: token.user, )}
 			let(:params) do
 				{
 					authentication: token.authentication,
@@ -63,10 +63,11 @@ RSpec.describe ReservationsController, type: :controller do
 				expect { put :sell, params: params }.to change { Sell.count }.by(1)
 			end
 			it 'changes reservation status' do
-				expect { put :sell, params: params }.to change { reservation.reload.status }.from('Pendiendte').to('Vendido')
+				expect { put :sell, params: params }.to change { reservation.reload.status }.from('Pendiente').to('Vendido')
 			end	
 		end
 		context 'The reservation is not sold' do
+			let(:reservation){create(:reservation, :sold, user: token.user, )}
 			let(:params) do
 				{
 					authentication: token.authentication,
@@ -76,6 +77,27 @@ RSpec.describe ReservationsController, type: :controller do
 			it 'doesnt sells the reservation' do
 				expect { put :sell, params: params}.to change { Sell.count }.by(0)
 			end
+		end
+	end
+
+	describe 'delete cancel' do
+		let(:token){create(:token)}
+		context 'The reservation is deleted (logically)' do
+			let(:reservation){create(:reservation, user: token.user, )}
+			let(:item){create(:item, :reserved)}
+			let(:reserved){create(:reserved, reservation:reservation, item: item)}
+			let(:params) do
+				{
+					authentication: token.authentication,
+					id: reservation.id
+				}
+			end
+			it 'cancels the reservation' do
+				expect { delete :cancel, params: params }.to change { reserved.reload.item.reload.status }.from('Reservado').to('Disponible')
+			end
+			it 'changes reservation status' do
+				expect { delete :cancel, params: params }.to change { reservation.reload.status }.from('Pendiente').to('Cancelada')
+			end	
 		end
 	end
 

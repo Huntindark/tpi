@@ -78,17 +78,8 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-
- # REMOTE
-#production:
- # <<: *default
-  #database: d9eemstilc43ic
-  #username: ljbckaffumhvub
-  #password: 573543e345358c1491ca88712685e7e18f64ee5ed18c1194357783a2aa534e53
-
-#LOCAL
- production:
-   <<: *default
-   database: tpi_production
-   username: tpi
-   password: <%= ENV['TPI_DATABASE_PASSWORD'] %>
+production:
+  <<: *default
+  database: tpi_production
+  username: tpi
+  password: <%= ENV['TPI_DATABASE_PASSWORD'] %>

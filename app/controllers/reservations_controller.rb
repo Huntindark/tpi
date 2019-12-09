@@ -51,7 +51,7 @@ class ReservationsController < ApplicationController
     if user.present? 
       res = Reservation.find(params[:id])
       if res.present?
-        if res.status = 'Pendiente'
+        if res.status == 'Pendiente'
           sale = Reservation.sell(res, user)
           ans = sale
         else
