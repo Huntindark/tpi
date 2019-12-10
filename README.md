@@ -28,7 +28,7 @@ post /usuarios
  	receive: {"id":8,"username":"pablo","passwd":"123","created_at":"2019-12-10T01:16:46.278Z","updated_at":"2019-12-10T01:16:46.278Z"}
 
 post /sesiones
-	send: curl -X POST localhost:3000/sesiones -H "Content-Type:application/json" -d '{"u": "Joe", "p": "123"}'
+	send: curl -X POST localhost:3000/sesiones -H "Content-Type:application/json" -d '{"username": "Joe", "passwd": "123"}'
 	receive: {"authentication":"371a52a78f29762e399494eb53fd4c1b3a2409e8"}
 
 get /productos

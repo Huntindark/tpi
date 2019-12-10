@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
 
   def session
-    @user = User.find_by(username: params[:u], passwd: params[:p])  
+    @user = User.find_by(username: params[:username], passwd: params[:passwd])  
     if @user.present?
       expiration = Time.now.utc + 30.minutes
       authentication =  Digest::SHA1.hexdigest "#{@user.id}#{@user[:passwd]}#{@user[:username]}#{expiration}"
