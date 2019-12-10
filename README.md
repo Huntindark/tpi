@@ -11,6 +11,9 @@ Como preparar el ambiente
 7. Ejecutar el comando rails s para encender el servidor
 8. Ingresar a localhost:3000 
 
+Usuario default
+  Username: default
+  Password: default
 
 Test
 
@@ -21,14 +24,14 @@ Documentacion de la API
 Ejemplos
 
 post /usuarios
- 	send: curl -X POST localhost:3000/usuarios -H "Content-Type:application/json" -d '{"username": "Joe", "passwd": "123"}'
- 	receive: user
+ 	send: curl -X POST localhost:3000/usuarios -H "Content-Type:application/json" -d '{"username": "pablo", "passwd": "123"}'
+ 	receive: {"id":8,"username":"pablo","passwd":"123","created_at":"2019-12-10T01:16:46.278Z","updated_at":"2019-12-10T01:16:46.278Z"}
 
 post /sesiones
 	send: curl -X POST localhost:3000/sesiones -H "Content-Type:application/json" -d '{"u": "Joe", "p": "123"}'
-	receive: hash {authentication: 'token'}
+	receive: {"authentication":"371a52a78f29762e399494eb53fd4c1b3a2409e8"}
 
 get /productos
 	send: curl localhost:3000/productos -H "Content-Type:application/json" [-d '{q:[scarce/all/in_stock]}']
-	receive: hash de productos y su stock {prod1: stock1, prod2: stock2}
+	receive: 
 
