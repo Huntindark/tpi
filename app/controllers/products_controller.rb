@@ -114,6 +114,6 @@ class ProductsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def product_params
-      params.permit(:unicode, :desc, :detail, :basePrice, :q, :token, :name, :create_x)
+      params.require(:product).permit(:unicode, :desc, :detail, :basePrice, :name)
     end
 end

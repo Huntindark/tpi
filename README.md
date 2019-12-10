@@ -18,3 +18,17 @@ Los test se ejecutar con rspec de la siguiente forma - bundle exec rspec spec/co
 
 
 Documentacion de la API 
+Ejemplos
+
+post /usuarios
+ 	send: curl -X POST localhost:3000/usuarios -H "Content-Type:application/json" -d '{"username": "Joe", "passwd": "123"}'
+ 	receive: user
+
+post /sesiones
+	send: curl -X POST localhost:3000/sesiones -H "Content-Type:application/json" -d '{"u": "Joe", "p": "123"}'
+	receive: hash {authentication: 'token'}
+
+get /productos
+	send: curl localhost:3000/productos -H "Content-Type:application/json" [-d '{q:[scarce/all/in_stock]}']
+	receive: hash de productos y su stock {prod1: stock1, prod2: stock2}
+

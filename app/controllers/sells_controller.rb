@@ -12,6 +12,9 @@ class SellsController < ApplicationController
       else
         render status: 404
       end
+    else 
+      render status: 404
+    end
   end
 
   def user_sale

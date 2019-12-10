@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   #CLIENT
   post '/clientes', to: 'clients#register'
 
-  #TESTING
+  #AUTHENTICATION
   get '/authenticate', to: 'tokens#authenticate'
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

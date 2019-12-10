@@ -11,6 +11,8 @@ class UsersController < ApplicationController
       token = Token.new(user_id: @user[:id], authentication: authentication, created_at: Time.now.utc, updated_at: Time.now.utc)
       token.save
       render json: { authentication: token.authentication }
+    else 
+      render status: 406
     end
   end
 
@@ -39,6 +41,8 @@ class UsersController < ApplicationController
     else
       render json: @user.errors, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique => e 
+    render json: e
   end
 
   # PATCH/PUT /users/1
@@ -48,6 +52,8 @@ class UsersController < ApplicationController
     else
       render json: @user.errors, status: :unprocessable_entity
     end
+  rescue ActiveRecord::RecordNotUnique => e
+    render json: e
   end
 
   # DELETE /users/1
