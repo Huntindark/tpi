@@ -94,11 +94,6 @@ class ProductsController < ApplicationController
       @product = Product.find(params[:id])
     end
 
-    def auth 
-      user = Token.authenticate(params[:authentication])
-      render status: 401 if !user.present? 
-    end
-
     # Only allow a trusted parameter "white list" through.
     def product_params
       params.require(:product).permit(:unicode, :desc, :detail, :basePrice, :name)

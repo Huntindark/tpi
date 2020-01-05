@@ -99,11 +99,6 @@ class ReservationsController < ApplicationController
     @reservation = Reservation.find(params[:id])
   end
 
-  def auth 
-    user = Token.authenticate(params[:authentication])
-    render status: 401 if !user.present? 
-  end
-
   # Only allow a trusted parameter "white list" through.
   def reservation_params
     params.permit(:client_id, :user_id, :status, :items, :sale, :to_reserve)

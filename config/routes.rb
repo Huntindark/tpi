@@ -11,6 +11,12 @@ Rails.application.routes.draw do
   resources :items
   resources :products
 
+  resources :users do
+    member do 
+      post 
+    end
+  end
+
   #USER
   post '/sesiones', to: 'users#session'
   post '/usuarios', to: 'users#create'
