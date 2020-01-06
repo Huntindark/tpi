@@ -8,4 +8,9 @@ class Item < ApplicationRecord
         result = @connection.exec_query("INSERT INTO items (product_id, status, created_at, updated_at)
 										 VALUES ('#{code}', 'Disponible', '#{time}', '#{time}')")
   end
+
+  def self.sold(item)
+  	item.update!(status: 'Vendido')
+  end
+  
 end
