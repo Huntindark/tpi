@@ -33,12 +33,10 @@ class Sell < ApplicationRecord
 				time = Time.now.utc
 				selling = Sell.create!(client_id: sale[:client_id], user_id: user.id, created_at: time, updated_at: time, total: total)
 		        sale[:to_sell].each do |k, v| 
-		          v.to_i.times do
-		            product = Product.find_by(unicode: k)
-		            item = Item.find_by(product_id: product.id, status: 'Disponible')
-		            Sold.create!(sell_id: selling.id, item_id: item.id, price: product.basePrice)
-		            Item.sold(item)
-		          end
+				    product = Product.find_by(unicode: k)
+				    items = Item.where(product_id: product.id, status: 'Disponible').first(v)
+				    items.each { | item | Sold.create!(sell_id: selling.id, item_id: item.id, price: product.basePrice)}
+				    items.each { | item | Item.sold(item) }
 		        end
 		        selling
 	    	else
