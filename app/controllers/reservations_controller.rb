@@ -1,13 +1,13 @@
 class ReservationsController < ApplicationController
   before_action :set_reservation, only: [:show, :update, :destroy]
-  before_action :auth, only: [:not_sold, :by_id, :reserve, :sell, :cancel]
+  before_action :auth, only: [:index, :show, :create, :sell, :destroy]
 
-  def not_sold
+  def index
     query = Reservation.not_sold
     render json: query
   end
 
-  def by_id
+  def show
     res = {}
     res['Reserva'] = Reservation.find(params[:id])
     if res['Reserva'].blank?  
@@ -23,7 +23,7 @@ class ReservationsController < ApplicationController
 
   #curl -X POST ht":{"abc123456": "1"}}' -H "Content-Type:application/json"_id":"1", "to_reserve"    '{"client_id":"1", "user_id":"1", "to_reserve":{"abc123456": "1"}}'
 
-  def reserve
+  def create
     if params[:client_id].present? && params[:to_reserve].present?
       response = Reservation.reserve(params, user)
       render json: response
@@ -47,7 +47,7 @@ class ReservationsController < ApplicationController
     render json: ans
   end
 
-  def cancel
+  def destroy
     res = Reservation.find(params[:id])
     if res.present? && (res.status != 'Vendido')
       toFree = Reserved.where(reservation_id: res.id)
@@ -57,17 +57,16 @@ class ReservationsController < ApplicationController
   end
 
   # GET /reservations
+=begin
   def index
     @reservations = Reservation.all
 
     render json: @reservations
   end
-
   # GET /reservations/1
   def show
     render json: @reservation
   end
-
   # POST /reservations
   def create
     @reservation = Reservation.new(reservation_params)
@@ -79,6 +78,13 @@ class ReservationsController < ApplicationController
     end
   end
 
+  # DELETE /reservations/1
+  def destroy
+    @reservation.destroy
+  end
+=end
+
+
   # PATCH/PUT /reservations/1
   def update
     if @reservation.update(reservation_params)
@@ -86,11 +92,6 @@ class ReservationsController < ApplicationController
     else
       render json: @reservation.errors, status: :unprocessable_entity
     end
-  end
-
-  # DELETE /reservations/1
-  def destroy
-    @reservation.destroy
   end
 
   private

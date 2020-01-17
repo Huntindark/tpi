@@ -5,7 +5,7 @@ class SellsController < ApplicationController
   def user_sales
     sales = Sell.where(user_id: user.id).select(:created_at, :total, :client_id)
     sales = sales.map { |sale| {"Client": "#{Client.find(sale.client_id).name}", "Date": "#{sale.created_at}", "Total": "#{sale.total}"}} 
-    render json: sales
+    render json: {sales: sales }
   end
 
   def user_sale
@@ -14,6 +14,7 @@ class SellsController < ApplicationController
     if params[:items].present?
       sales[:Items] = Sold.joins(:sell, :item).where("solds.sell_id= 1").select("items.*")
     end
+    render json: {slaes: sales}
   end
 
   def sell
