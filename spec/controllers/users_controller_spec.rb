@@ -31,8 +31,8 @@ RSpec.describe UsersController, type: :controller do
             let!(:user){create(:user)}
             let(:params) do
                 {
-                    u: 'Joe',
-                    p: '1234'
+                    username: 'Joe',
+                    passwd: '1234'
                 }
             end
             it 'logs in' do
@@ -43,8 +43,8 @@ RSpec.describe UsersController, type: :controller do
             let!(:user){create(:user)}
             let(:params) do
                 {
-                    u: 'John',
-                    p: '1234'
+                    username: 'John',
+                    passwd: '1234'
                 }
             end
             it "doesn't logs in" do

@@ -7,25 +7,18 @@ class Reservation < ApplicationRecord
     Reservation.joins(:client).where(status: 'Pendiente').select(:"reservations.created_at", :name, :total)
   end
 
-  def self.reserve(params, user)
-  	response = {}
-  	enough = {}
-    params[:to_reserve].each { |k, v| enough[k] = (Product.where(unicode: k).joins(:items).count) > v.to_i}
-    if enough.all?
-      client = Client.find(params[:client_id])
-  		if client.present?
-        total = {}
-        params[:to_reserve].each { |k, v| total[k] = Product.where(unicode: k).select(:basePrice) } 
-        total = total.values.flatten.collect { |p| p.basePrice }  
-        total = total.inject(:+)
+  def self.reserve(res, user)
+    if Product.enough(res[:to_reserve])
+  		if Client.find(res[:client_id]).present?
+        total = Product.total_for(res[:to_reserve])
         time = Time.now.utc
 				reservation = Reservation.create!(client_id: client.id, user_id: user.id, created_at: time, updated_at: time, status: 'Pendiente', total: total)
-        params[:to_reserve].each do |k, v| 
-          v.to_i.times do
-            product = Product.find_by(unicode: k)
-            item = Item.find_by(product_id: product.id, status: 'Disponible')
+        res[:to_reserve].each do |k, v| 
+          product = Product.find_by(unicode: k)
+          items = Item.find_by(product_id: product.id, status: 'Disponible').first(v)
+          items.each do |item|
             Reserved.create!(reservation_id: reservation.id, item_id: item.id, price: product.basePrice)
-            item.update!(status: 'Reservado')
+            Item.reserve()
           end
         end
         reservation

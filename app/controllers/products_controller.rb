@@ -1,10 +1,10 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :update, :destroy]
-  before_action :auth, only: [:list_filtered, :show_prod, :show_prod_items, :create_prod_items]
+  before_action :set_product, only: [:show, :show_prod_items, :update, :destroy, :create_prod_items]
+#  before_action :auth, only: [:show, :index, :show_prod_items, :create_prod_items]
 
 
-  def list_filtered
-    @products = Product.all
+  def index
+    products = Product.all
     if params[:q].present?
       filter = params[:q]
       query = {}
@@ -16,51 +16,25 @@ class ProductsController < ApplicationController
     else 
       query = Product.getInStock
     end
-    render json: query.first(25)
+    render json: {productos: query.first(25)}
   end
 
-
-
-  def show_prod
-    product = Product.find_by(unicode: params[:code])
-    if product.blank?
-      render status: 404 
-    else
-      render json: product
-    end
+  def show
+    render json: @product
   end
 
   def show_prod_items
-    product = Product.find_by(unicode: params[:code]) 
-    if product.blank?
-      render status: 404 
-    else
-      items = Item.where(product_id: product.id)
-      render json: items
-    end
+    items = Item.where(product_id: @product.id)
+    render json: {items: items}
   end
 
   def create_prod_items
     if params[:create_x].present?
       create = params[:create_x]
-      product = Product.find_by(unicode: params[:code]) 
-      Product.createItems(product.id, create)   
+      Product.createItems(@product.id, create)   
     else
       render status: 406
     end
-  end
-
-
-  # GET /products
-  def index
-    @products = Product.all
-
-    render json: @products
-  end
-
-  # GET /products/1
-  def show
-    render json: @product
   end
 
   # POST /products
@@ -91,8 +65,13 @@ class ProductsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_product
-      @product = Product.find(params[:id])
+      @product = Product.find_by(unicode: params[:id]) 
+      if @product.blank?
+        render json: {status: 404}
+      end
     end
+
+
 
     # Only allow a trusted parameter "white list" through.
     def product_params

@@ -10,6 +10,12 @@ Rails.application.routes.draw do
   resources :phones
   resources :items
   resources :products
+  resources :products, path: 'productos' do
+    collection do 
+      get :show_prod_items, path: ':id/items'
+      post :create_prod_items, path: ':id/items'
+    end
+  end
 
 =begin 
  resources :users do
@@ -24,10 +30,12 @@ Rails.application.routes.draw do
   post '/usuarios', to: 'users#create'
     
   #PRODUCT
+=begin
   get '/productos', to: 'products#list_filtered'
   get '/productos/:code', to: 'products#show_prod'
   get '/productos/:code/items', to: 'products#show_prod_items'
   post '/productos/:code/items', to: 'products#create_prod_items'
+=end
 
   #RESERVATION
   get '/reservas', to: 'reservations#not_sold'
