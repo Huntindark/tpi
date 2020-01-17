@@ -3,7 +3,7 @@ class SellsController < ApplicationController
   before_action :auth, only: [:user_sales, :user_sale, :sell]
 
   def user_sales
-    sales = Sell.where(user_id: user.id).select(:created_at, :total, :client_id)
+    sales = Sell.where(user_id: @user.id).select(:created_at, :total, :client_id)
     sales = sales.map { |sale| {"Client": "#{Client.find(sale.client_id).name}", "Date": "#{sale.created_at}", "Total": "#{sale.total}"}} 
     render json: {sales: sales }
   end
@@ -18,7 +18,7 @@ class SellsController < ApplicationController
   end
 
   def sell
-    Sell.sell(params, user)
+    Sell.sell(params, @user)
   end
 
   # GET /sells

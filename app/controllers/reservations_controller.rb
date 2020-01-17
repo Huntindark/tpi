@@ -25,7 +25,7 @@ class ReservationsController < ApplicationController
 
   def create
     if params[:client_id].present? && params[:to_reserve].present?
-      response = Reservation.reserve(params, user)
+      response = Reservation.reserve(params, @user)
       render json: response
     else 
       render json: {message: 'Missing parameters', status: 406 }
@@ -36,7 +36,7 @@ class ReservationsController < ApplicationController
     res = Reservation.find(params[:id])
     if res.present?
       if res.status == 'Pendiente'
-        sale = Reservation.sell(res, user)
+        sale = Reservation.sell(res, @user)
         ans = sale
       else
         ans =  {message: 'Reservation already sold', status: 406 }  
