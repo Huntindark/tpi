@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :update, :destroy]
 
-  def register
+  def create
     if params[phones].present
       @client = Client.create!(client_params)
       params[phones].each do | k, v |
@@ -24,6 +24,7 @@ class ClientsController < ApplicationController
   end
 
   # POST /clients
+=begin  
   def create
     @client = Client.new(client_params)
 
@@ -33,7 +34,7 @@ class ClientsController < ApplicationController
       render json: @client.errors, status: :unprocessable_entity
     end
   end
-
+=end
   # PATCH/PUT /clients/1
   def update
     if @client.update(client_params)

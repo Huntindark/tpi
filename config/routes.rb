@@ -28,13 +28,13 @@ Rails.application.routes.draw do
   get '/ventas/:id', to: 'sells#user_sale'
   post '/ventas', to: 'sells#sell'
 
-  #CLIENT
-  post '/clientes', to: 'clients#register'
 
   #AUTHENTICATION
   get '/authenticate', to: 'tokens#authenticate'
 
 =begin 
+  #CLIENT
+  post '/clientes', to: 'clients#register'
  resources :users do
     member do 
       post 
