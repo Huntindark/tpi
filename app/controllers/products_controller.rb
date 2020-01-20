@@ -1,6 +1,6 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :show_prod_items, :update, :destroy, :create_prod_items]
-#  before_action :auth, only: [:show, :index, :show_prod_items, :create_prod_items]
+  before_action :auth, only: [:show, :index, :show_prod_items, :create_prod_items]
 
 
   def index

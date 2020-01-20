@@ -18,7 +18,18 @@ class SellsController < ApplicationController
   end
 
   def sell
-    Sell.sell(params, @user)
+
+    if Product.enough(params[:to_sell])
+      if (Client.find(params[:client_id])).present?
+        venta = Sell.sell(params, @user)
+        render json: { venta: venta }
+      else
+        {status: 406, message: 'Client doesnt exist'}  
+      end
+    else
+      {status: 406, message: 'Not enough stock'}
+    end
+
   end
 
   # GET /sells
