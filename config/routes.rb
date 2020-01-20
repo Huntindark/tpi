@@ -18,21 +18,27 @@ Rails.application.routes.draw do
   end
   resources :reservations, path: 'reservas' do
     collection do
-      put :sell, path 'id/vender'
+      put :sell, path: ':id/vender'
     end
   end   
-  resources :sells, path: 'ventas' do   
-
-  #SELL
-  get '/ventas', to: 'sells#user_sales'
-  get '/ventas/:id', to: 'sells#user_sale'
-  post '/ventas', to: 'sells#sell'
-
+  resources :sells, path: 'ventas'  do
+    collection do
+      get :user_sales, path: ''
+      get :user_sale, path: ':id'
+      post :sell, path: ''
+    end
+  end 
 
   #AUTHENTICATION
   get '/authenticate', to: 'tokens#authenticate'
 
+
+
 =begin 
+  #SELL
+  get '/ventas', to: 'sells#user_sales'
+  get '/ventas/:id', to: 'sells#user_sale'
+  post '/ventas', to: 'sells#sell'
   #CLIENT
   post '/clientes', to: 'clients#register'
  resources :users do
@@ -64,4 +70,5 @@ Rails.application.routes.draw do
 
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+
 end

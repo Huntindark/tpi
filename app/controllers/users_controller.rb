@@ -12,7 +12,7 @@ class UsersController < ApplicationController
       token.save
       render json: { authentication: token.authentication }
     else 
-      render status: 406
+      render json: status: 406
     end
   end
 

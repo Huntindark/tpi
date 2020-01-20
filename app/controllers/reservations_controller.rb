@@ -17,7 +17,7 @@ class ReservationsController < ApplicationController
       end
       render json: res
     else 
-      render status: 404
+      render json: status: 404
     end
   end  
 
@@ -44,7 +44,7 @@ class ReservationsController < ApplicationController
     else
       ans = {message: 'Reservation not found', status: 404 }
     end
-    render json: ans
+    render json: venta: ans
   end
 
   def destroy
