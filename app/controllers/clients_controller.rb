@@ -23,18 +23,6 @@ class ClientsController < ApplicationController
     render json: @client
   end
 
-  # POST /clients
-=begin  
-  def create
-    @client = Client.new(client_params)
-
-    if @client.save
-      render json: @client, status: :created, location: @client
-    else
-      render json: @client.errors, status: :unprocessable_entity
-    end
-  end
-=end
   # PATCH/PUT /clients/1
   def update
     if @client.update(client_params)

@@ -21,8 +21,6 @@ class ReservationsController < ApplicationController
     end
   end  
 
-  #curl -X POST ht":{"abc123456": "1"}}' -H "Content-Type:application/json"_id":"1", "to_reserve"    '{"client_id":"1", "user_id":"1", "to_reserve":{"abc123456": "1"}}'
-
   def create
     if params[:client_id].present? && params[:to_reserve].present?
       response = Reservation.reserve(params, @user)

@@ -1,4 +1,4 @@
-require 'digest/sha1'
+  require 'digest/sha1'
 
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :update, :destroy]
