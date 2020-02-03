@@ -2,12 +2,16 @@ class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :update, :destroy]
 
   def create
-    if params[phones].present
-      @client = Client.create!(client_params)
-      params[phones].each do | k, v |
-        Phone.create!(number: v, client_id: @client.id)        
-      end   
-      render json: {@client, status: :created, location: @client}         
+    @client = Client.new(client_params)
+    if params[:phones].present?
+      params[:phones].split(',').each do | k |
+        @client.phones.build(number: k)
+      end
+    end
+    if @client.save
+      render json: @client, status: :created, location: @client          
+    else
+      render json: @client.errors, status: :bad_request
     end
   end
 
