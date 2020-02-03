@@ -33,7 +33,7 @@ class ProductsController < ApplicationController
       create = params[:create_x]
       Product.createItems(@product.id, create)   
     else
-      render json: status: 406
+      render json: {status: 406}
     end
   end
 

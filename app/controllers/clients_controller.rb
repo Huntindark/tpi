@@ -7,7 +7,7 @@ class ClientsController < ApplicationController
       params[phones].each do | k, v |
         Phone.create!(number: v, client_id: @client.id)        
       end   
-      render json: @client, status: :created, location: @client          
+      render json: {@client, status: :created, location: @client}         
     end
   end
 
