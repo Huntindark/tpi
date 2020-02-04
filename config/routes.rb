@@ -32,6 +32,9 @@ Rails.application.routes.draw do
   #AUTHENTICATION
   get '/authenticate', to: 'tokens#authenticate'
 
+  #USER
+  post '/sesiones', to: 'users#session'
+  post '/usuarios', to: 'users#create'
 
 
 =begin 
@@ -55,9 +58,6 @@ Rails.application.routes.draw do
   put '/reservas/:id/vender', to: 'reservations#sell'
   delete 'reservas/:id', to: 'reservations#cancel'
 =end
-  #USER
-  post '/sesiones', to: 'users#session'
-  post '/usuarios', to: 'users#create'
     
   #PRODUCT
 =begin

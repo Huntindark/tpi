@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ReservationsController, type: :controller do
-	describe 'post reserve' do
+	describe 'post create' do
 		let(:token){create(:token)}	
 		let(:client){create(:client)}
-		let(:product){create(:product)}
+		let(:product){create(:itemized_product)}
 		let!(:item){create(:item, product: product)}
 		let(:res)do
 			{
@@ -19,7 +19,7 @@ RSpec.describe ReservationsController, type: :controller do
 					to_reserve: res
 				}
 			end
-			subject { post :reserve, params: params}
+			subject { post :create, params: params}
 			it 'creates the reservation' do
 				expect{subject}.to change { Reservation.count }.by(1)
 			end
@@ -27,7 +27,9 @@ RSpec.describe ReservationsController, type: :controller do
 				expect{subject}.to change {Reserved.count}.by(1)
 			end
 			it 'changes items statuses' do
-				expect{subject}.to change { item.reload.status }.from('Disponible').to('Reservado')
+				item_count = product.items.where(status: 'Disponible').count
+				subject
+				expect(product.items.where(status: 'Disponible').count).to eq item_count - 1
 			end
 		end
 		context "The reservation isn't created succesfully" do
@@ -80,7 +82,7 @@ RSpec.describe ReservationsController, type: :controller do
 		end
 	end
 
-	describe 'delete cancel' do
+	describe 'delete destroy' do
 		let(:token){create(:token)}
 		context 'The reservation is deleted (logically)' do
 			let(:reservation){create(:reservation, user: token.user, )}
@@ -93,10 +95,10 @@ RSpec.describe ReservationsController, type: :controller do
 				}
 			end
 			it 'cancels the reservation' do
-				expect { delete :cancel, params: params }.to change { reserved.reload.item.reload.status }.from('Reservado').to('Disponible')
+				expect { delete :destroy, params: params }.to change { reserved.reload.item.status }.from('Reservado').to('Disponible')
 			end
 			it 'changes reservation status' do
-				expect { delete :cancel, params: params }.to change { reservation.reload.status }.from('Pendiente').to('Cancelada')
+				expect { delete :destroy, params: params }.to change { reservation.reload.status }.from('Pendiente').to('Cancelada')
 			end	
 		end
 	end
