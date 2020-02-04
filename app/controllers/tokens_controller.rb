@@ -3,7 +3,7 @@ class TokensController < ApplicationController
 
   def authenticate
     ans = Token.authenticate(params[:authentication])
-    render json: authentication: ans
+    render json: {authentication: ans}
   end
   # GET /tokens
   def index
