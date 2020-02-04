@@ -7,16 +7,15 @@ class ProductsController < ApplicationController
     products = Product.all
     if params[:q].present?
       filter = params[:q]
-      query = {}
+      @query = {}
       if filter == 'scarce'
-          query = Product.getScarce
+          @query = Product.getScarce
       elsif filter == 'all'
-          query = Product.getAll
+          @query = Product.getAll
       end
-    else 
-      query = Product.getInStock
     end
-    render json: {productos: query.first(25)}
+    @query = Product.getInStock unless @query
+    render json: {productos: @query.first(25)}
   end
 
   def show
@@ -24,8 +23,8 @@ class ProductsController < ApplicationController
   end
 
   def show_prod_items
-    items = Item.where(product_id: @product.id)
-    render json: {items: items}
+    @items = Item.where(product_id: @product.id)
+    render json: {items: @items}
   end
 
   def create_prod_items

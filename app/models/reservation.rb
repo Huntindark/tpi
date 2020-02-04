@@ -12,13 +12,13 @@ class Reservation < ApplicationRecord
   		if Client.find(res[:client_id]).present?
         total = Product.total_for(res[:to_reserve])
         time = Time.now.utc
-				reservation = Reservation.create!(client_id: client.id, user_id: user.id, created_at: time, updated_at: time, status: 'Pendiente', total: total)
+				reservation = Reservation.create!(client_id: res[:client_id], user_id: user.id, created_at: time, updated_at: time, status: 'Pendiente', total: total)
         res[:to_reserve].each do |k, v| 
           product = Product.find_by(unicode: k)
-          items = Item.find_by(product_id: product.id, status: 'Disponible').first(v)
+          items = Item.where(product_id: product.id, status: 'Disponible').first(v.to_i)
           items.each do |item|
             Reserved.create!(reservation_id: reservation.id, item_id: item.id, price: product.basePrice)
-            Item.reserve()
+            Item.reserve(item)
           end
         end
         reservation

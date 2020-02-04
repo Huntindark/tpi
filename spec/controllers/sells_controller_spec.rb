@@ -4,7 +4,7 @@ RSpec.describe SellsController, type: :controller do
 	describe 'post sell' do
 		let(:token){create(:token)}	
 		let(:client){create(:client)}
-		let(:product){create(:product)}
+		let(:product){create(:itemized_product)}
 		let!(:item){create(:item, product: product)}
 		let(:sell)do
 			{
@@ -27,7 +27,9 @@ RSpec.describe SellsController, type: :controller do
 				expect{subject}.to change {Sold.count}.by(1)
 			end
 			it 'changes items statuses' do
-				expect{subject}.to change { item.reload.status }.from('Disponible').to('Vendido')
+				item_count = product.items.where(status: 'Disponible').count
+				subject
+				expect(product.items.where(status: 'Disponible').count).to eq item_count - 1
 			end
 		end
 		context "The sale isn't created succesfully" do
