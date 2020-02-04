@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: tpi_production
-  username: tpi
-  password: <%= ENV['TPI_DATABASE_PASSWORD'] %>
+  database: d3iccm15dnpoj6
+  username: daoalouixozbhz
+  password: fd0f5d64e2e01017313d2350081c5db3efd1a73361d3da631b270a65a38d033b
