@@ -90,7 +90,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.0)
-    msgpack (1.3.1)
+    msgpack (1.3.2)
     msgpack_rails (0.4.3)
       activesupport (>= 3.0)
       msgpack
